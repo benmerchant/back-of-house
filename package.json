@@ -8,5 +8,13 @@
   },
   "keywords": [],
   "author": "Ben Merchant <benjaminmerchant@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benmerchant/back-of-house.git"
+  },
+  "bugs": {
+    "url": "https://github.com/benmerchant/back-of-house/issues"
+  },
+  "homepage": "https://github.com/benmerchant/back-of-house#readme"
 }
