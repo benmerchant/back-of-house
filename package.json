@@ -1,31 +1,19 @@
 {
   "name": "back-of-house",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "cookie-parser": "^1.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^7.0.0",
-    "express": "^4.16.3",
-    "express-session": "^1.15.6",
-    "jsonwebtoken": "^8.2.1",
-    "mongoose": "^5.4.19"
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.5.14"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.4.0",
-    "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.4.2",
-    "chai": "^4.1.2",
-    "chai-http": "^4.0.0",
-    "mocha": "^5.1.1",
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.19.1"
   },
   "keywords": [],
   "author": "Ben Merchant <benjaminmerchant@gmail.com>",
