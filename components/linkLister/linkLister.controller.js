@@ -24,39 +24,54 @@ const LinkListerModel = require('./linkLister.model');
 const ValidationErrors = [];
 
 module.exports = {
+
   createNewLinkLister: [ // Create a new LinkLister link
     (req,res,next) => { // My own little validation
       if(_.isEmpty(req.body))
         ValidationErrors.push({message: 'Somehow there was nothing in the request body!'});
       next();
     },
-    (req,res) => {
+    (req,res,next) => {
       if(!_.isEmpty(ValidationErrors))
         return res.status(400).json({ errors: ValidationErrors });
       else {
         // description isn't required
         if(_.isEmpty(req.body.description)){
           const NewLinkLister = new LinkListerModel({url: req.body.url});
-          res.status(200).json({
-            message:'Success - url only',
-            link: NewLinkLister
-          });
+          const query = NewLinkLister.save();
+          query.then((link) => {
+            res.status(200).json({
+              message:'Success - url only',
+              link: link
+            });
+          }).catch(next);
         } else {
           const NewLinkLister = new LinkListerModel({
             url: req.body.url,
             description: req.body.description
           });
-          res.status(200).json({
-            message:'Success - url & description only',
-            link: NewLinkLister
-          })
+          const query = NewLinkLister.save();
+          query.then((newLink) => {
+            console.log(newLink);
+            res.status(200).json({
+              message:'Success - url & description',
+              link: newLink
+            });
+          }).catch(next);
         }
       }
     }
   ],
   // GET all LinkLister links
-  getAllLinkLister: (req,res) => {
-    res.json({message: 'LinkLister GET all links route111'});
+  getAllLinkLister: (req,res,next) => {
+    const query = LinkListerModel.find({});
+    const promise = query.exec();
+    promise.then((links) => {
+      res.status(200).json({
+        message:'Success - here are the links',
+        links: links
+      });
+    }).catch(next);
   },
   // GET one LinkLister link by id
   getOneLinkLister: (req,res,next) => {
