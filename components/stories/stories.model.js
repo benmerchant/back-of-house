@@ -8,7 +8,7 @@ const StorySchema = mongoose.Schema({
   },
   storyType: {
     type: String,
-    enum: ['About', 'Tutorials', 'Projects', 'Articles', 'Blog'],
+    enum: ['About', 'Tutorials', 'Projects', 'Aritcles', 'Blog'],
     required: [true, 'Should never see this. Use dropdown menu in client app.']
   },
   dateAdded: {
