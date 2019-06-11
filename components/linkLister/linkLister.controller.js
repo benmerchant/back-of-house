@@ -13,7 +13,7 @@ const _ = require('lodash');
 /**
 * @typedef {Mongoose.Schema} {(
 *            url:string,
-*            dateAdded:Date,
+*            dateAdded:Date, [default]
 *            description:string
 *          )}
 */
@@ -75,14 +75,36 @@ module.exports = {
   },
   // GET one LinkLister link by id
   getOneLinkLister: (req,res,next) => {
-    res.json({message: 'LinkLister GET one route1'});
+    const query = LinkListerModel.findById(req.params.id);
+    query.then((link) => {
+      if(!link) res.status(404).json({message:'No such document with that _id'});
+      res.status(200).json({
+        message:'Success - here is your link',
+        link: link
+      });
+    }).catch(next);
   },
   // Update a LinkLister link by id
-  updateOneLinkLister: (req,res) => {
-    res.json({message: 'LinkLister PUT route1'});
+  updateOneLinkLister: (req,res,next) => {
+    const query = LinkListerModel.findByIdAndUpdate(req.params.id,{
+      url: req.body.newUrl
+    },{new:true});
+    query.then((link) => {
+      res.status(200).json({
+        message:'Success - here is your updated Link',
+        link: link
+      });
+    }).catch(next);
   },
   // Delete a LinkLister link by id
-  deleteOneLinkLister: (req,res) => {
-    res.json({message: 'LinkLister DELETE route1'});
+  deleteOneLinkLister: (req,res,next) => {
+    const query = LinkListerModel.findByIdAndDelete(req.params.id);
+    query.then((info) => {
+      if(!info) res.status(404).json({message:'No such document with that _id'});
+      res.status(200).json({
+        message:'Successfully deleted that document. great job',
+        info: info
+      });
+    }).catch(next);
   }
 }
