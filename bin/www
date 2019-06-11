@@ -1,0 +1,32 @@
+const app = require('../app');
+const http = require('http');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+
+console.log('www is starting up the http server...');
+
+const port = 3001;
+app.set('port', port);
+
+const connString = 'mongodb://localhost:27017/bmdd_v2_dev';
+app.set('mongooseURI', connString);
+
+app.use(morgan('combined'));
+
+const server = http.createServer(app);
+
+server.listen({
+  host: 'localhost',
+  port: app.get('port')
+});
+
+server.on('listening', () => {
+  console.log(`Server started and listening on port ${app.get('port')}...`);
+  mongoose.connect(app.get('mongooseURI'), {useNewUrlParser: true}, (err) => {
+    if(err) throw err;
+    else {
+      const mongooseConnStatus = mongoose.connection.readyState;
+      console.log(`Ready State: ${mongooseConnStatus} - Connected to MongoDB...`);
+    }
+  });
+});
