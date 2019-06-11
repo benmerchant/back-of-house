@@ -7,9 +7,8 @@
  * @licence MIT
  * @copyright June 11, 2019
  */
-// dependencies
 const _ = require('lodash');
-// import Mongoose model
+const ObjectId = require('mongoose').Types.ObjectId;
 /**
 * @typedef {Mongoose.Schema} {(
 *            url:string,
@@ -20,45 +19,42 @@ const _ = require('lodash');
 /** @type {Mongoose.Schema} */
 const LinkListerModel = require('./linkLister.model');
 
-// object for validation errors
+/** @type {Array[{Objects}]} */
 const ValidationErrors = [];
 
 module.exports = {
 
   createNewLinkLister: [ // Create a new LinkLister link
     (req,res,next) => { // My own little validation
-      if(_.isEmpty(req.body))
+      if(_.isEmpty(req.body)){
         ValidationErrors.push({message: 'Somehow there was nothing in the request body!'});
-      next();
+        res.status(400).json({ errors: ValidationErrors });
+      } else { next(); }
     },
     (req,res,next) => {
-      if(!_.isEmpty(ValidationErrors))
-        return res.status(400).json({ errors: ValidationErrors });
-      else {
-        // description isn't required
-        if(_.isEmpty(req.body.description)){
-          const NewLinkLister = new LinkListerModel({url: req.body.url});
-          const query = NewLinkLister.save();
-          query.then((link) => {
-            res.status(200).json({
-              message:'Success - url only',
-              link: link
-            });
-          }).catch(next);
-        } else {
-          const NewLinkLister = new LinkListerModel({
-            url: req.body.url,
-            description: req.body.description
+      // description isn't required
+      if(_.isEmpty(req.body.description)){
+        const NewLinkLister = new LinkListerModel({url: req.body.url});
+        const query = NewLinkLister.save();
+        query.then((link) => {
+          res.status(200).json({
+            message:'Success - url only',
+            link: link
           });
-          const query = NewLinkLister.save();
-          query.then((newLink) => {
-            console.log(newLink);
-            res.status(200).json({
-              message:'Success - url & description',
-              link: newLink
-            });
-          }).catch(next);
-        }
+        }).catch(next);
+      } else {
+        const NewLinkLister = new LinkListerModel({
+          url: req.body.url,
+          description: req.body.description
+        });
+        const query = NewLinkLister.save();
+        query.then((newLink) => {
+          console.log(newLink);
+          res.status(200).json({
+            message:'Success - url & description',
+            link: newLink
+          });
+        }).catch(next);
       }
     }
   ],
@@ -74,16 +70,28 @@ module.exports = {
     }).catch(next);
   },
   // GET one LinkLister link by id
-  getOneLinkLister: (req,res,next) => {
-    const query = LinkListerModel.findById(req.params.id);
-    query.then((link) => {
-      if(!link) res.status(404).json({message:'No such document with that _id'});
-      res.status(200).json({
-        message:'Success - here is your link',
-        link: link
-      });
-    }).catch(next);
-  },
+  getOneLinkLister: [
+    // test if data is valid before using it in our database
+    (req,res,next) => {
+      if(!ObjectId.isValid(req.params.id)){
+        ValidationErrors.push({message: 'You sent an invalid ObjectId to search by'});
+        res.status(400).json({errors:ValidationErrors});
+      } else {next();}
+
+    },
+    (req,res,next) =>
+      {
+        const LinkListerContextObject = {_id: req.params.id}
+        const query = LinkListerModel.findOne({_id: LinkListerContextObject._id});
+        query.then((link) => {
+          if(!link) res.status(404).json({message:'No such document with that _id'});
+          res.status(200).json({
+            message:'Success - here is your link',
+            link: link
+          });
+        }).catch(next);
+      }
+  ],
   // Update a LinkLister link by id
   updateOneLinkLister: (req,res,next) => {
     const query = LinkListerModel.findByIdAndUpdate(req.params.id,{
