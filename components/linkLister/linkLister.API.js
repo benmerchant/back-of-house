@@ -8,28 +8,20 @@
  * @copyright June 10, 2019
 */
 const router = require('express').Router();
+// import the controller
+const LinkListerController = require('./linklister.controller');
 
 const linkListerRouter = router;
 
 // GET all LinkLister links
-linkListerRouter.get('/', (req,res) => {
-  res.json({message: 'LinkLister GET all links route'});
-});
+linkListerRouter.get('/', LinkListerController.getAllLinkLister);
 // GET one LinkLister link by id
-linkListerRouter.get('/:id', (req,res,next) => {
-  res.json({message: 'LinkLister GET one route'});
-});
+linkListerRouter.get('/:id', LinkListerController.getOneLinkLister);
 // Create a new LinkLister link
-linkListerRouter.post('/', (req,res) => {
-  res.json({message: 'LinkLister POST route'});
-});
+linkListerRouter.post('/', LinkListerController.createNewLinkLister);
 // Update a LinkLister link by id
-linkListerRouter.put('/:id', (req,res) => {
-  res.json({message: 'LinkLister PUT route'});
-});
+linkListerRouter.put('/:id', LinkListerController.updateOneLinkLister);
 // Delete a LinkLister link by id
-linkListerRouter.delete('/:id', (req,res) => {
-  res.json({message: 'LinkLister DELETE route'});
-});
+linkListerRouter.delete('/:id', LinkListerController.deleteOneLinkLister);
 
 module.exports = linkListerRouter;

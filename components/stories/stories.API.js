@@ -8,28 +8,20 @@
  * @copyright June 10, 2019
 */
 const router = require('express').Router();
+// import the controller
+const StoriesController = require('./stories.controller');
 
 const storiesRouter = router;
 
 // GET all Stories links
-storiesRouter.get('/', (req,res) => {
-  res.json({message: 'Stories GET all links route'});
-});
+storiesRouter.get('/', StoriesController.getAllStories);
 // GET one Stories link by id
-storiesRouter.get('/:id', (req,res,next) => {
-  res.json({message: 'Stories GET one route'});
-});
+storiesRouter.get('/:id', StoriesController.getOneStories);
 // Create a new Stories link
-storiesRouter.post('/', (req,res) => {
-  res.json({message: 'Stories POST route'});
-});
+storiesRouter.post('/', StoriesController.createNewStories);
 // Update a Stories link by id
-storiesRouter.put('/:id', (req,res) => {
-  res.json({message: 'Stories PUT route'});
-});
+storiesRouter.put('/:id', StoriesController.updateOneStories);
 // Delete a Stories link by id
-storiesRouter.delete('/:id', (req,res) => {
-  res.json({message: 'Stories DELETE route'});
-});
+storiesRouter.delete('/:id', StoriesController.deleteOneStories);
 
 module.exports = storiesRouter;
