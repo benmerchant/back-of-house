@@ -7,6 +7,8 @@
  * @licence MIT
  * @copyright June 11, 2019
 */
+// import Mongoose model
+const StoriesModel = require('./stories.model');
 
 module.exports = {
   // GET all Stories links
